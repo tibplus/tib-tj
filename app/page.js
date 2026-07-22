@@ -18,6 +18,7 @@ export default function Home() {
         <div className="orb orb-1"></div>
         <div className="orb orb-2"></div>
         <div className="orb orb-3"></div>
+        <div className="scanline"></div>
         <div className="wrap">
           <div className="hero-inner">
             <div className="eyebrow">{t("heroKicker")}</div>

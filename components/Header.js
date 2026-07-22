@@ -1,10 +1,11 @@
 "use client";
 
 import { useLang } from "@/components/LangProvider";
-import { PHONE_NUMBER } from "@/lib/whatsapp";
+import { PHONE_NUMBER, waLink } from "@/lib/whatsapp";
 
 export default function Header() {
   const { t, lang, setLang } = useLang();
+  const defaultMsg = `${t("msgGreeting")} КТ/МРТ.`;
 
   return (
     <header className="nav">
@@ -23,6 +24,9 @@ export default function Header() {
           </span>
         </div>
         <div className="nav-right">
+          <a className="nav-phone" href={`tel:${PHONE_NUMBER}`}>
+            {PHONE_NUMBER}
+          </a>
           <div className="lang-toggle" role="group" aria-label="Забон / Язык">
             <button
               className={`lang-btn ${lang === "ru" ? "active" : ""}`}
@@ -37,8 +41,16 @@ export default function Header() {
               TJ
             </button>
           </div>
-          <a className="nav-cta" href={`tel:${PHONE_NUMBER}`}>
-            {t("navCall")}
+          <a
+            className="nav-cta"
+            href={waLink(defaultMsg)}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <span className="nav-cta-dot" aria-hidden="true">
+              <span className="nav-cta-dot-ping"></span>
+            </span>
+            {t("navWhatsapp")}
           </a>
         </div>
       </div>
