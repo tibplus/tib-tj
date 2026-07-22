@@ -7,10 +7,32 @@ import { LangProvider } from "@/components/LangProvider";
 // так сборка проекта не зависит от доступа к fonts.googleapis.com в момент
 // билда (важно для окружений с ограниченным сетевым доступом, например CI).
 
+const SITE_URL = "https://tib.tj";
+const SITE_TITLE = "Запись на КТ и МРТ в Душанбе — TIB.TJ";
+const SITE_DESCRIPTION =
+  "Бесплатно подберём ближайшее время для КТ и МРТ в клиниках Душанбе. Запись через WhatsApp. Быстро, удобно и без лишних звонков.";
+
 export const metadata = {
-  title: "Запись на КТ и МРТ в Душанбе — TIB.TJ",
-  description:
-    "Бесплатно подберём ближайшее время для КТ и МРТ в клиниках Душанбе. Запись через WhatsApp. Быстро, удобно и без лишних звонков.",
+  metadataBase: new URL(SITE_URL),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  // Открытый граф — как ссылка на сайт выглядит при пересылке в WhatsApp/Telegram
+  // и в некоторых блоках поисковой выдачи.
+  openGraph: {
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    siteName: "TIB.TJ",
+    locale: "ru_RU",
+    type: "website",
+  },
+  // Проверку владения сайтом в Google Search Console / Яндекс.Вебмастере можно
+  // сделать этим мета-тегом вместо записи в DNS — впиши код подтверждения сюда,
+  // когда он появится на соответствующем сервисе.
+  verification: {
+    // google: "код-подтверждения-google",
+    // yandex: "код-подтверждения-yandex",
+  },
 };
 
 export default function RootLayout({ children }) {
