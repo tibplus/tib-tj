@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { LangProvider } from "@/components/LangProvider";
 
 // Шрифт подключаем через <link> (runtime), а не через next/font/google —
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
       <body className="antialiased">
         <LangProvider>{children}</LangProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
