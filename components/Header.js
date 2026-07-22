@@ -10,7 +10,7 @@ export default function Header() {
   return (
     <header className="nav">
       <div className="nav-inner">
-        <div className="logo">
+        <a className="logo" href="/" aria-label="tib.tj — на главную">
           <span className="logo-mark">
             <svg viewBox="0 0 24 24">
               <rect x="2.2" y="2.2" width="19.6" height="19.6" rx="6.5" fill="none" stroke="currentColor" strokeWidth="1.6" />
@@ -20,7 +20,7 @@ export default function Header() {
           <span className="logo-text">
             tib<span className="dot">.</span>tj
           </span>
-        </div>
+        </a>
         <div className="nav-right">
           <a className="nav-phone" href={`tel:${PHONE_NUMBER}`}>
             {PHONE_NUMBER}
