@@ -6,9 +6,9 @@ import { LangProvider } from "@/components/LangProvider";
 // билда (важно для окружений с ограниченным сетевым доступом, например CI).
 
 export const metadata = {
-  title: "TIB.TJ — Navigatsiya. Ба духтур ва диагностика дуруст",
+  title: "Запись на КТ и МРТ в Душанбе — TIB.TJ",
   description:
-    "TIB.TJ — мустақил хизмати навигатсияи ташхис: пайдо кардани духтур ва клиникаи дурусти ба шумо лозим дар Тоҷикистон.",
+    "Бесплатно подберём ближайшее время для КТ и МРТ в клиниках Душанбе. Запись через WhatsApp. Быстро, удобно и без лишних звонков.",
 };
 
 export default function RootLayout({ children }) {
@@ -19,10 +19,10 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap"
         />
       </head>
-      <body className="font-sans bg-white text-slate-800 antialiased">
+      <body className="antialiased">
         <LangProvider>{children}</LangProvider>
       </body>
     </html>

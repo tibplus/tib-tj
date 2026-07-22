@@ -1,31 +1,46 @@
 "use client";
 
-import Link from "next/link";
 import { useLang } from "@/components/LangProvider";
+import { PHONE_NUMBER } from "@/lib/whatsapp";
 
 export default function Header() {
   const { t, lang, setLang } = useLang();
 
   return (
-    <header className="border-b border-slate-100">
-      <div className="mx-auto max-w-5xl px-4 py-4 flex items-center justify-between">
-        <Link href="/" className="text-xl font-bold text-brand">
-          {t("brand")}
-        </Link>
-        <nav className="flex items-center gap-6">
-          <Link href="/doctors" className="text-sm font-medium text-slate-600 hover:text-brand">
-            {t("doctorsTitle")}
-          </Link>
-          <Link href="/clinics" className="text-sm font-medium text-slate-600 hover:text-brand">
-            {t("clinicsTitle")}
-          </Link>
-          <button
-            onClick={() => setLang(lang === "ru" ? "tg" : "ru")}
-            className="text-sm font-semibold border border-slate-200 rounded-full px-3 py-1 hover:border-brand hover:text-brand transition-colors"
-          >
-            {t("langSwitch")}
-          </button>
-        </nav>
+    <header className="nav">
+      <div className="nav-inner">
+        <div className="logo">
+          <span className="logo-mark">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.6" />
+              <g className="orbit-dot">
+                <circle cx="15" cy="9" r="2.4" fill="currentColor" />
+              </g>
+            </svg>
+          </span>
+          <span className="logo-text">
+            tib<span className="dot">.</span>tj
+          </span>
+        </div>
+        <div className="nav-right">
+          <div className="lang-toggle" role="group" aria-label="Забон / Язык">
+            <button
+              className={`lang-btn ${lang === "ru" ? "active" : ""}`}
+              onClick={() => setLang("ru")}
+            >
+              RU
+            </button>
+            <button
+              className={`lang-btn ${lang === "tg" ? "active" : ""}`}
+              onClick={() => setLang("tg")}
+            >
+              TJ
+            </button>
+          </div>
+          <a className="nav-cta" href={`tel:${PHONE_NUMBER}`}>
+            {t("navCall")}
+          </a>
+        </div>
       </div>
     </header>
   );
