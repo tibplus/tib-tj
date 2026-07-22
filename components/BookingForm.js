@@ -3,23 +3,35 @@
 import { useMemo, useState } from "react";
 import { useLang } from "@/components/LangProvider";
 import { areasByModality, areaLabel } from "@/lib/examinations";
+import { safetyItemsByModality, safetyLabel } from "@/lib/safety";
 import { waLink } from "@/lib/whatsapp";
 
-// Анкета перед WhatsApp: пациент отвечает на 3-4 коротких вопроса, и мы сами
-// собираем осмысленное сообщение — вместо чистого чата, куда человек не знает,
-// что писать первым.
+// Анкета перед WhatsApp: пациент отвечает на несколько коротких вопросов, и мы
+// сами собираем осмысленное сообщение — вместо чистого чата, куда человек не
+// знает, что писать первым. Плюс мягкий скрининг противопоказаний: не блокирует
+// отправку, только помечает сообщение флагом, чтобы сортировать по клиникам
+// осознанно (см. обсуждение и анализ конкурентов про противопоказания МРТ/КТ).
 export default function BookingForm() {
   const { t, lang } = useLang();
   const [modality, setModality] = useState(""); // "kt" | "mrt"
   const [area, setArea] = useState("");
   const [referral, setReferral] = useState(""); // "yes" | "no"
+  const [urgency, setUrgency] = useState(""); // "today" | "week" | "flex"
+  const [safetyFlags, setSafetyFlags] = useState([]); // array of safety item ids
+  const [name, setName] = useState("");
   const [time, setTime] = useState("");
 
   const areas = modality ? areasByModality[modality] ?? [] : [];
+  const safetyItems = modality ? safetyItemsByModality[modality] ?? [] : [];
 
   function pickModality(next) {
     setModality(next);
-    setArea(""); // сбрасываем область — список зависит от вида исследования
+    setArea(""); // список областей и чек-лист безопасности зависят от вида исследования
+    setSafetyFlags([]);
+  }
+
+  function toggleSafetyFlag(id) {
+    setSafetyFlags((prev) => (prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]));
   }
 
   const message = useMemo(() => {
@@ -28,16 +40,23 @@ export default function BookingForm() {
     const referralText =
       referral === "yes" ? t("optYes") : referral === "no" ? t("optNo") : t("msgReferralFallback");
     const timeText = time.trim() || t("msgTimeFallback");
+    const urgencyText =
+      urgency === "today" ? t("urgencyToday") : urgency === "week" ? t("urgencyWeek") : urgency === "flex" ? t("urgencyFlex") : "";
 
-    const lines = [
-      `${t("msgGreeting")} ${modalityLabel || "?"}.`,
-      "",
-      `${t("msgArea")}: ${areaText || "—"}`,
-      `${t("msgReferral")}: ${referralText}`,
-      `${t("msgTime")}: ${timeText}`,
-    ];
+    const lines = [`${t("msgGreeting")} ${modalityLabel || "?"}.`, ""];
+    if (name.trim()) lines.push(`${t("msgName")}: ${name.trim()}`);
+    lines.push(`${t("msgArea")}: ${areaText || "—"}`);
+    lines.push(`${t("msgReferral")}: ${referralText}`);
+    if (urgencyText) lines.push(`${t("msgUrgency")}: ${urgencyText}`);
+    lines.push(`${t("msgTime")}: ${timeText}`);
+
+    if (safetyFlags.length > 0) {
+      const flagLabels = safetyFlags.map((id) => safetyLabel(modality, id, lang)).filter(Boolean);
+      lines.push("", `${t("msgSafetyFlag")}: ${flagLabels.join(", ")}`);
+    }
+
     return lines.join("\n");
-  }, [modality, area, referral, time, lang, t]);
+  }, [modality, area, referral, urgency, safetyFlags, name, time, lang, t]);
 
   const canSend = Boolean(modality && area);
 
@@ -95,6 +114,59 @@ export default function BookingForm() {
             {t("optNo")}
           </button>
         </div>
+      </div>
+
+      <div className="booking-field">
+        <span className="booking-label">{t("labelUrgency")}</span>
+        <div className="chips">
+          {[
+            ["today", "urgencyToday"],
+            ["week", "urgencyWeek"],
+            ["flex", "urgencyFlex"],
+          ].map(([id, key]) => (
+            <button
+              key={id}
+              type="button"
+              className={`chip chip-select ${urgency === id ? "chip-active" : ""}`}
+              onClick={() => setUrgency(id)}
+            >
+              {t(key)}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {modality && safetyItems.length > 0 && (
+        <div className="booking-field safety-field">
+          <span className="booking-label">{t("labelSafety")}</span>
+          <div className="safety-list">
+            {safetyItems.map((item) => (
+              <label key={item.id} className="safety-item">
+                <input
+                  type="checkbox"
+                  checked={safetyFlags.includes(item.id)}
+                  onChange={() => toggleSafetyFlag(item.id)}
+                />
+                <span>{lang === "tg" ? item.tg : item.ru}</span>
+              </label>
+            ))}
+          </div>
+          <p className="safety-note">{t("safetyNote")}</p>
+        </div>
+      )}
+
+      <div className="booking-field">
+        <label className="booking-label" htmlFor="booking-name">
+          {t("labelName")}
+        </label>
+        <input
+          id="booking-name"
+          type="text"
+          className="booking-input"
+          placeholder={t("namePlaceholder")}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
       </div>
 
       <div className="booking-field">

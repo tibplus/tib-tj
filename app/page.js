@@ -15,14 +15,12 @@ export default function Home() {
       <Header />
 
       <section className="hero">
-        <div className="hero-grid"></div>
         <div className="orb orb-1"></div>
         <div className="orb orb-2"></div>
         <div className="orb orb-3"></div>
-        <div className="scanline"></div>
         <div className="wrap">
           <div className="hero-inner">
-            <div className="eyebrow on-dark">{t("heroKicker")}</div>
+            <div className="eyebrow">{t("heroKicker")}</div>
             <h1>
               {t("heroH1Pre")}
               <em>{t("heroH1Em")}</em>
@@ -138,7 +136,7 @@ export default function Home() {
         <div className="orb orb-2" style={{ opacity: 0.2 }}></div>
         <div className="wrap">
           <div className="section-head">
-            <div className="eyebrow on-dark">{t("whyEyebrow")}</div>
+            <div className="eyebrow">{t("whyEyebrow")}</div>
             <h2>{t("whyH2")}</h2>
             <p>{t("whyP")}</p>
           </div>
@@ -182,6 +180,7 @@ export default function Home() {
               </span>
               <span className="mono">CT</span>
               <h3>{t("ctH3")}</h3>
+              <p className="mod-price">{t("ctPrice")}</p>
               <p>{t("ctP")}</p>
             </div>
             <div className="mod-card">
@@ -212,9 +211,11 @@ export default function Home() {
               </span>
               <span className="mono">MRI</span>
               <h3>{t("mriH3")}</h3>
+              <p className="mod-price">{t("mriPrice")}</p>
               <p>{t("mriP")}</p>
             </div>
           </div>
+          <p className="price-note">{t("priceNote")}</p>
         </div>
       </section>
 
